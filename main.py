@@ -1,6 +1,12 @@
 import streamlit as st
 from utils import *
 
+st.sidebar.markdown(
+    '''<div class="markdown-text-container stText" style="width: 698px;"><footer><p></p></footer><div style="font-size: 12px;"> 
+    <a href="https://github.com/mkhorasani/Streamlit-Authenticator">GitHub Homepage</a></div><div style="font-size: 12px;"> 
+    Streamlit Authenticator</div></div>''',
+    unsafe_allow_html=True)
+
 @st.dialog('Verification code')
 def register_verification_code(app_name, email_register):
     st.info('Please check your email for the verification code')
