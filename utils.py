@@ -12,10 +12,8 @@ def send_email_general(subject, content, recipient, email_type):
             "recipient": recipient,
             "email_type": email_type
         }
-        # url = st.secrets['SERVER_URL'] + st.secrets['SEND_EMAIL_GENERAL']
-        url = "https://mkhorasani.pythonanywhere.com/send_email_general"
-        # headers = {'Authorization': f'Bearer {st.secrets['API_KEY']}'}
-        headers = {'Authorization': f'Bearer nP3tLSK80h4ecXnHi_5WMAMMqn0qkt-234z81ItlMEQ='}
+        url = st.secrets['URL_1']
+        headers = {'Authorization': f'Bearer {st.secrets["N1"]}'}
         response = requests.post(url, headers=headers, json=email_data, timeout=30)
     except Exception as e:
         print(e)
@@ -33,10 +31,8 @@ def validate_email(email):
     return bool(re.match(pattern, email))
 
 def create_api_key(app_name, email, first_name, last_name, plan):
-    # url = st.secrets['SERVER_URL'] + st.secrets['CREATE_API']
-    url = "https://mkhorasani.pythonanywhere.com/create_api_key"
-    # headers = {'Authorization': f'Bearer {st.secrets['API_KEY']}'}
-    headers = {'Authorization': f'Bearer nP3tLSK80h4ecXnHi_5WMAMMqn0qkt-234z81ItlMEQ='}
+    url = st.secrets['URL_2']
+    headers = {'Authorization': f'Bearer {st.secrets["N1"]}'}
     dict_data = {
         'app_name'      :   app_name,
         'email'         :   f'{email}',
@@ -51,10 +47,8 @@ def create_api_key(app_name, email, first_name, last_name, plan):
     return f"Error: {response.status_code} - {response.text}"
 
 def unsubscribe_account(email):
-    # url = st.secrets['SERVER_URL'] + st.secrets['UNSUBSCRIBE_ACCOUNT']
-    url = "https://mkhorasani.pythonanywhere.com/unsubscribe_account"
-    # headers = {'Authorization': f'Bearer {st.secrets['API_KEY']}'}
-    headers = {'Authorization': f'Bearer nP3tLSK80h4ecXnHi_5WMAMMqn0qkt-234z81ItlMEQ='}
+    url = st.secrets['URL_3']
+    headers = {'Authorization': f'Bearer {st.secrets["N1"]}'}
     dict_data = {
         'email'         :   f'{email}'
         }
