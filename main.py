@@ -1,6 +1,11 @@
 import streamlit as st
 from utils import *
 
+st.set_page_config(
+    page_title="Streamlit Authenticator",
+    page_icon=icon
+)
+
 hide_menu_style = """
     <style>
     #MainMenu {visibility: hidden;}
@@ -81,8 +86,9 @@ with tab2:
     if st.session_state['unsubscribe_code'] != None:
         unsubscribe_account_verification_code(email_unsubscribe)
 
-    st.markdown(
-    '''<div class="markdown-text-container stText" style="width: 698px;"><footer><p></p></footer><div style="font-size: 12px;"> 
-    <a href="https://github.com/mkhorasani/Streamlit-Authenticator">GitHub Homepage</a></div><div style="font-size: 12px;"> 
-    Streamlit Authenticator</div></div>''',
-    unsafe_allow_html=True)
+st.write('___')
+st.markdown(
+'''<div class="markdown-text-container stText" style="width: 698px;"><footer><p></p></footer><div style="font-size: 12px;"> 
+<a href="https://github.com/mkhorasani/Streamlit-Authenticator">GitHub Homepage</a></div><div style="font-size: 12px;"> 
+Streamlit Authenticator</div></div>''',
+unsafe_allow_html=True)
