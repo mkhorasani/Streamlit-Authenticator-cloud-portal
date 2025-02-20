@@ -25,12 +25,12 @@ def register_verification_code(app_name, email_register):
     if st.button('Verify code'):
         if st.session_state['register_code'] == code:
             result = create_api_key(app_name, email_register, 'None', 'None', 'FREE')
-            if 'previous' in result['message']:
-                del st.session_state['register_code']
-                st.error('Email previously registered')
-            else:
+            if 'sent to email successfully' in result['message']:
                 del st.session_state['register_code']
                 st.success('API key sent to email')
+            else:
+                del st.session_state['register_code']
+                st.success('Unable to subscribe')
         else:
             st.error('Code is incorrect')
 
@@ -69,9 +69,11 @@ with tab1:
         elif not validate_length(app_name):
             st.error('Application name is not valid')
         else:
-            st.session_state['register_code'] = generate_random_verification_code()
-            send_email_general('Streamlit Authenticator Verification Code',
-                               st.session_state['register_code'], email_register, '2FA')
+            result = email_previously_registered(email_register)
+            if 'not previously registered' not in result['message']:
+                st.session_state['register_code'] = generate_random_verification_code()
+                send_email_general('Streamlit Authenticator Verification Code',
+                                st.session_state['register_code'], email_register, '2FA')
 
     if st.session_state['register_code'] != None:
         register_verification_code(app_name, email_register)
