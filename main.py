@@ -84,12 +84,15 @@ with tab2:
         st.session_state['unsubscribe_code'] = None
 
     if st.button('Unsubscribe'):
-        if 'not previously registered' not in email_previously_registered(email_unsubscribe):
-            st.session_state['unsubscribe_code'] = generate_random_verification_code()
-            send_email_general('Streamlit Authenticator Verification Code',
-                                st.session_state['unsubscribe_code'], email_register, '2FA')
+        if not validate_email(email_unsubscribe):
+            st.error('Email is not valid')
         else:
-            st.error('An account with this email does not exist')
+            if 'not previously registered' not in email_previously_registered(email_unsubscribe):
+                st.session_state['unsubscribe_code'] = generate_random_verification_code()
+                send_email_general('Streamlit Authenticator Verification Code',
+                                    st.session_state['unsubscribe_code'], email_register, '2FA')
+            else:
+                st.error('An account with this email does not exist')
     if st.session_state['unsubscribe_code'] != None:
         unsubscribe_account_verification_code(email_unsubscribe)
 
