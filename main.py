@@ -23,7 +23,7 @@ hide_menu_style = """
     </style>
     """
 st.markdown(hide_menu_style, unsafe_allow_html=True)
-
+st.write(st.session_state)
 @st.dialog('Verification code')
 def register_verification_code(app_name, email_register):
     st.info('Please check your email for the verification code')
@@ -92,7 +92,7 @@ with tab1:
 
 with tab2:
     st.markdown("""Use the form below to unsubscribe and delete your account""")
-    email_unsubscribe = st.text_input('Email', key='email_unsubscribe')
+    email_unsubscribe = st.text_input('Email', key='email_unsubscribe', autocomplete='off')
     if 'unsubscribe_code' not in st.session_state:
         st.session_state['unsubscribe_code'] = None
     if st.button('Unsubscribe'):
