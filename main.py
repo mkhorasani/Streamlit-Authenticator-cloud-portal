@@ -3,6 +3,12 @@ from PIL import Image
 
 from utils import *
 
+class VerificationError(Exception):
+    pass
+
+class SubscriptionError(Exception):
+    pass
+
 icon = Image.open('icon.png')
 
 st.set_page_config(
@@ -23,32 +29,42 @@ def register_verification_code(app_name, email_register):
     st.info('Please check your email for the verification code')
     code = st.text_input('Code', autocomplete='off')
     if st.button('Verify code'):
-        if st.session_state['register_code'] == code:
+        try:
+            if st.session_state['register_code'] != code:
+                raise VerificationError('Code is incorrect')
+            
             result = create_api_key(app_name, email_register, 'None', 'None', 'FREE')
-            if 'sent to email successfully' in result['message']:
-                del st.session_state['register_code']
-                st.success('API key sent to email')
-            else:
-                del st.session_state['register_code']
-                st.success('Unable to subscribe')
-        else:
-            st.error('Code is incorrect')
+            st.session_state.pop('register_code', None)
+            
+            if 'sent to email successfully' not in result['message']:
+                raise SubscriptionError('Unable to subscribe')
+            
+            st.success('API key sent to email')
+        except VerificationError as e:
+            st.error(str(e))
+        except SubscriptionError as e:
+            st.error(str(e))
 
 @st.dialog('Verification code')
 def unsubscribe_account_verification_code(email_unsubscribe):
     st.info('Please check your email for the verification code')
     code = st.text_input('Code', autocomplete='off')
     if st.button('Verify code'):
-        if st.session_state['unsubscribe_code'] == code:
+        try:
+            if st.session_state['unsubscribe_code'] != code:
+                raise VerificationError('Code is incorrect')
+            
             result = unsubscribe_account(email_unsubscribe)
-            if 'deleted successfully' in result['message']:
-                del st.session_state['unsubscribe_code']
-                st.success('Account unsubscribed successfully')
-            else:
-                del st.session_state['unsubscribe_code']
-                st.success('Unable to unsubscribe')
-        else:
-            st.error('Code is incorrect')
+            st.session_state.pop('unsubscribe_code', None)
+            
+            if 'deleted successfully' not in result['message']:
+                raise SubscriptionError('Unable to unsubscribe')
+            
+            st.success('Account unsubscribed successfully')
+        except VerificationError as e:
+            st.error(str(e))
+        except SubscriptionError as e:
+            st.error(str(e))
 
 st.image('logo.png')
 
@@ -64,18 +80,23 @@ with tab1:
         st.session_state['register_code'] = None
 
     if st.button('Generate API key'):
-        if not validate_email(email_register):
-            st.error('Email is not valid')
-        elif not validate_length(app_name):
-            st.error('Application name is not valid')
-        else:
+        try:
+            if not validate_email(email_register):
+                raise ValueError('Email is not valid')
+            if not validate_length(app_name):
+                raise ValueError('Application name is not valid')
+            
             result = email_previously_registered(email_register)
-            if 'not previously registered' not in result['message']:
+            if 'not previously registered' in result['message']:
                 st.session_state['register_code'] = generate_random_verification_code()
                 send_email_general('Streamlit Authenticator Verification Code',
-                                st.session_state['register_code'], email_register, '2FA')
+                                   st.session_state['register_code'], email_register, '2FA')
+            else:
+                raise ValueError('Email is already registered')
+        except ValueError as e:
+            st.error(str(e))
 
-    if st.session_state['register_code'] != None:
+    if st.session_state['register_code'] is not None:
         register_verification_code(app_name, email_register)
 
 with tab2:
@@ -86,17 +107,21 @@ with tab2:
         st.session_state['unsubscribe_code'] = None
 
     if st.button('Unsubscribe'):
-        if not validate_email(email_unsubscribe):
-            st.error('Email is not valid')
-        else:
+        try:
+            if not validate_email(email_unsubscribe):
+                raise ValueError('Email is not valid')
+            
             result = email_previously_registered(email_unsubscribe)
-            if 'not previously registered' not in result['message']:
-                st.session_state['unsubscribe_code'] = generate_random_verification_code()
-                send_email_general('Streamlit Authenticator Verification Code',
-                                    st.session_state['unsubscribe_code'], email_register, '2FA')
-            else:
-                st.error('An account with this email does not exist')
-    if st.session_state['unsubscribe_code'] != None:
+            if 'not previously registered' in result['message']:
+                raise ValueError('An account with this email does not exist')
+            
+            st.session_state['unsubscribe_code'] = generate_random_verification_code()
+            send_email_general('Streamlit Authenticator Verification Code',
+                               st.session_state['unsubscribe_code'], email_unsubscribe, '2FA')
+        except ValueError as e:
+            st.error(str(e))
+
+    if st.session_state['unsubscribe_code'] is not None:
         unsubscribe_account_verification_code(email_unsubscribe)
 
 st.write('___')
