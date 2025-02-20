@@ -1,33 +1,49 @@
 import streamlit as st
 from PIL import Image
-
 from utils import *
 
 class VerificationError(Exception):
+    """
+    Raised when the verification code is incorrect.
+    """
     pass
 
 class SubscriptionError(Exception):
+    """
+    Raised when there is an issue with subscribing or unsubscribing.
+    """
     pass
 
-icon = Image.open('icon.png')
+# Load and set page icon
+icon: Image.Image = Image.open('icon.png')
 
 st.set_page_config(
     page_title="Streamlit Authenticator",
     page_icon=icon
 )
 
-hide_menu_style = """
+# Hide Streamlit menu and footer
+hide_menu_style: str = """
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     </style>
     """
 st.markdown(hide_menu_style, unsafe_allow_html=True)
-st.write(st.session_state)
-@st.dialog('Verification code')
-def register_verification_code(app_name, email_register):
+
+def register_verification_code(app_name: str, email_register: str) -> None:
+    """
+    Displays the verification code input field and processes the code for registration.
+    
+    Parameters
+    ----------
+    app_name : str
+        The name of the application being registered.
+    email_register : str
+        The email address used for registration.
+    """
     st.info('Please check your email for the verification code')
-    code = st.text_input('Code', autocomplete='off')
+    code: str = st.text_input('Code', autocomplete='off')
     if st.button('Verify code'):
         try:
             if not check_hash(code, st.session_state['register_code']):
@@ -37,15 +53,20 @@ def register_verification_code(app_name, email_register):
             if 'sent to email successfully' not in result['message']:
                 raise SubscriptionError('Unable to subscribe')
             st.success('API key sent to email')
-        except VerificationError as e:
-            st.error(str(e))
-        except SubscriptionError as e:
+        except (VerificationError, SubscriptionError) as e:
             st.error(str(e))
 
-@st.dialog('Verification code')
-def unsubscribe_account_verification_code(email_unsubscribe):
+def unsubscribe_account_verification_code(email_unsubscribe: str) -> None:
+    """
+    Displays the verification code input field and processes the code for account unsubscription.
+    
+    Parameters
+    ----------
+    email_unsubscribe : str
+        The email address used for unsubscription.
+    """
     st.info('Please check your email for the verification code')
-    code = st.text_input('Code', autocomplete='off')
+    code: str = st.text_input('Code', autocomplete='off')
     if st.button('Verify code'):
         try:
             if not check_hash(code, st.session_state['unsubscribe_code']):
@@ -55,19 +76,20 @@ def unsubscribe_account_verification_code(email_unsubscribe):
             if 'deleted successfully' not in result['message']:
                 raise SubscriptionError('Unable to unsubscribe')
             st.success('Account unsubscribed successfully')
-        except VerificationError as e:
-            st.error(str(e))
-        except SubscriptionError as e:
+        except (VerificationError, SubscriptionError) as e:
             st.error(str(e))
 
+# Display logo
 st.image('logo.png')
 tab1, tab2 = st.tabs(['Register', 'Unsubscribe'])
 
+# Registration tab
 with tab1:
     st.markdown("""Register to receive a free API key to use Streamlit Authenticator's
         **two factor authentication** and **send email** features""")
-    app_name = st.text_input('Application name', autocomplete='off')
-    email_register = st.text_input('Email', key='email_register', autocomplete='off')
+    app_name: str = st.text_input('Application name', autocomplete='off')
+    email_register: str = st.text_input('Email', key='email_register', autocomplete='off')
+    
     if 'register_code' not in st.session_state:
         st.session_state['register_code'] = None
 
@@ -79,7 +101,7 @@ with tab1:
                 raise ValueError('Application name is not valid')
             result = email_previously_registered(email_register)
             if 'not previously registered' in result['message']:
-                register_code = generate_random_verification_code()
+                register_code: str = generate_random_verification_code()
                 st.session_state['register_code'] = hash(register_code)
                 send_email_general('Streamlit Authenticator Verification Code',
                                    register_code, email_register, '2FA')
@@ -87,14 +109,18 @@ with tab1:
                 raise ValueError('Email is already registered')
         except ValueError as e:
             st.error(str(e))
+    
     if st.session_state['register_code'] is not None:
         register_verification_code(app_name, email_register)
 
+# Unsubscribe tab
 with tab2:
     st.markdown("""Use the form below to unsubscribe and delete your account""")
-    email_unsubscribe = st.text_input('Email', key='email_unsubscribe', autocomplete='off')
+    email_unsubscribe: str = st.text_input('Email', key='email_unsubscribe', autocomplete='off')
+    
     if 'unsubscribe_code' not in st.session_state:
         st.session_state['unsubscribe_code'] = None
+
     if st.button('Unsubscribe'):
         try:
             if not validate_email(email_unsubscribe):
@@ -102,15 +128,17 @@ with tab2:
             result = email_previously_registered(email_unsubscribe)
             if 'not previously registered' in result['message']:
                 raise ValueError('An account with this email does not exist')
-            unsubscribe_code = generate_random_verification_code()
+            unsubscribe_code: str = generate_random_verification_code()
             st.session_state['unsubscribe_code'] = hash(unsubscribe_code)
             send_email_general('Streamlit Authenticator Verification Code',
                                unsubscribe_code, email_unsubscribe, '2FA')
         except ValueError as e:
             st.error(str(e))
+    
     if st.session_state['unsubscribe_code'] is not None:
         unsubscribe_account_verification_code(email_unsubscribe)
 
+# Footer
 st.write('___')
 st.markdown(
 '''<div class="markdown-text-container stText" style="width: 698px;"><footer><p></p></footer><div style="font-size: 12px;"> 
