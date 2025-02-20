@@ -2,7 +2,14 @@ import streamlit as st
 import requests
 import string
 import random
+import bcrypt
 import re
+
+def check_hash(string, hashed_string):
+    return bcrypt.checkpw(string.encode(), hashed_string.encode())
+
+def hash(string):
+    return bcrypt.hashpw(string.encode(), bcrypt.gensalt()).decode()
 
 def send_email_general(subject, content, recipient, email_type):
     try:
