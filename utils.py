@@ -57,3 +57,15 @@ def unsubscribe_account(email):
         data = response.json()
         return data
     return f"Error: {response.status_code} - {response.text}"
+
+def email_previously_registered(email):
+    url = st.secrets['URL_4']
+    headers = {'Authorization': f'Bearer {st.secrets["N1"]}'}
+    dict_data = {
+        'email'         :   f'{email}'
+        }
+    response = requests.post(url, headers=headers, json=dict_data)
+    if response.status_code == 200:
+        data = response.json()
+        return data
+    return f"Error: {response.status_code} - {response.text}"
