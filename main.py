@@ -25,7 +25,7 @@ def register_verification_code(app_name, email_register):
     if st.button('Verify code'):
         if st.session_state['register_code'] == code:
             result = create_api_key(app_name, email_register, 'None', 'None', 'FREE')
-            if 'previous' in result:
+            if 'previous' in result['message']:
                 del st.session_state['register_code']
                 st.error('Email previously registered')
             else:
@@ -41,7 +41,7 @@ def unsubscribe_account_verification_code(email_unsubscribe):
     if st.button('Verify code'):
         if st.session_state['unsubscribe_code'] == code:
             result = unsubscribe_account(email_unsubscribe)
-            if 'deleted successfully' in result:
+            if 'deleted successfully' in result['message']:
                 del st.session_state['unsubscribe_code']
                 st.success('Account unsubscribed successfully')
             else:
@@ -88,8 +88,7 @@ with tab2:
             st.error('Email is not valid')
         else:
             result = email_previously_registered(email_unsubscribe)
-            st.write(result)
-            if 'not previously registered' not in result:
+            if 'not previously registered' not in result['message']:
                 st.session_state['unsubscribe_code'] = generate_random_verification_code()
                 send_email_general('Streamlit Authenticator Verification Code',
                                     st.session_state['unsubscribe_code'], email_register, '2FA')
