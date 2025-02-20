@@ -57,8 +57,8 @@ tab1, tab2 = st.tabs(['Register', 'Unsubscribe'])
 with tab1:
     st.markdown("""Register to receive a free API key to use Streamlit Authenticator's
         **two factor authentication** and **send email** features""")
-    app_name = st.text_input('Application name')
-    email_register = st.text_input('Email', key='email_register')
+    app_name = st.text_input('Application name', autocomplete='off')
+    email_register = st.text_input('Email', key='email_register', autocomplete='off')
 
     if 'register_code' not in st.session_state:
         st.session_state['register_code'] = None
