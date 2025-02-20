@@ -88,7 +88,7 @@ with tab2:
             st.error('Email is not valid')
         else:
             result = email_previously_registered(email_unsubscribe)
-            print(result)
+            st.write(result)
             if 'not previously registered' not in result:
                 st.session_state['unsubscribe_code'] = generate_random_verification_code()
                 send_email_general('Streamlit Authenticator Verification Code',
