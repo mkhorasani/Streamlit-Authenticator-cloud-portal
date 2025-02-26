@@ -93,7 +93,7 @@ with tab1:
     if 'register_code' not in st.session_state:
         st.session_state['register_code'] = None
 
-    if st.button('Generate API key'):
+    if st.button('Register'):
         try:
             if not validate_email(email_register):
                 raise ValueError('Email is not valid')
