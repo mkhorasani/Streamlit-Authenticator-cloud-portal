@@ -147,8 +147,7 @@ with tab3:
             if not validate_length(api_key, min_length=32, max_length=32):
                 raise ValueError('API key is not correct')
             result = count_calls(api_key)
-            st.write(result)
-            if 'error' in result:
+            if 'None' in result['message']:
                 raise ValueError('An account with this API key does not exist')
             st.metric('Number of times used', str(result['message']))
         except ValueError as e:
