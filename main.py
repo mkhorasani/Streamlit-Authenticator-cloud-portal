@@ -137,6 +137,7 @@ with tab2:
     
     if st.session_state['unsubscribe_code'] is not None:
         unsubscribe_account_verification_code(email_unsubscribe)
+        
 # Stats tab
 with tab3:
     st.markdown("""Use the form below to retrieve the number of times your users have used the **two factor authentication** and/or **send email** features""")
@@ -145,10 +146,10 @@ with tab3:
         try:
             if not validate_length(api_key, min_length=32, max_length=32):
                 raise ValueError('API key is not correct')
-            calls = count_calls(api_key)
-            if 'not previously registered' in result['message']:
+            result = count_calls(api_key)
+            if 'error' in result:
                 raise ValueError('An account with this API key does not exist')
-            st.metric('Number of times used', str(calls['message']))
+            st.metric('Number of times used', str(result['message']))
         except ValueError as e:
             st.error(str(e))
 
