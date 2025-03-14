@@ -78,7 +78,7 @@ def unsubscribe_account_verification_code(email_unsubscribe: str) -> None:
             st.success('Account unsubscribed successfully')
         except (VerificationError, SubscriptionError) as e:
             st.error(str(e))
-
+            
 # Display logo
 st.image('logo.png')
 tab1, tab2, tab3 = st.tabs(['Register', 'Unsubscribe', 'Stats'])
@@ -143,7 +143,7 @@ with tab3:
     api_key: str = st.text_input('API key', key='api_key', autocomplete='off')
     if st.button('Check'):
         try:
-            if not validate_length(api_key):
+            if not validate_length(api_key, min_length=32, max_length=32):
                 raise ValueError('API key is not correct')
             calls = count_calls(api_key)
             if 'not previously registered' in result['message']:
