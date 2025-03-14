@@ -80,7 +80,7 @@ def email_previously_registered(email: str) -> dict:
     return {"error": f"{response.status_code} - {response.text}"}
 
 def count_calls(api_key: str) -> dict:
-    """Check the number of calls made for an account."""
+    """Retrieves the number of calls made for an account."""
     url = st.secrets['URL_5']
     headers = {'Authorization': f'Bearer {st.secrets["N1"]}'}
     dict_data = {'api_key': api_key}
