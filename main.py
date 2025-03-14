@@ -139,7 +139,7 @@ with tab2:
         unsubscribe_account_verification_code(email_unsubscribe)
 # Stats tab
 with tab3:
-    st.markdown("""Use the form below to retrieve the number of times your users have used the two factor authentication and/or send email feature""")
+    st.markdown("""Use the form below to retrieve the number of times your users have used the **two factor authentication** and/or **send email** features""")
     api_key: str = st.text_input('API key', key='api_key', autocomplete='off')
     if st.button('Check'):
         try:
