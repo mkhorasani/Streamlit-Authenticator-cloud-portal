@@ -81,7 +81,7 @@ def unsubscribe_account_verification_code(email_unsubscribe: str) -> None:
 
 # Display logo
 st.image('logo.png')
-tab1, tab2 = st.tabs(['Register', 'Unsubscribe'])
+tab1, tab2 = st.tabs(['Register', 'Unsubscribe', 'Stats'])
 
 # Registration tab
 with tab1:
@@ -137,6 +137,20 @@ with tab2:
     
     if st.session_state['unsubscribe_code'] is not None:
         unsubscribe_account_verification_code(email_unsubscribe)
+# Stats tab
+with tab3:
+    st.markdown("""Use the form below to retrieve the number of times your users have used the two factor authentication and/or send email feature""")
+    api_key: str = st.text_input('API key', key='api_key', autocomplete='off')
+    if st.button('Check'):
+        try:
+            if not validate_length(api_key):
+                raise ValueError('API key is not correct')
+            calls = count_calls(api_key)
+            if 'not previously registered' in result['message']:
+                raise ValueError('An account with this API key does not exist')
+            st.metric('Number of times used', str(calls['message']))
+        except ValueError as e:
+            st.error(str(e))
 
 # Footer
 st.write('___')
