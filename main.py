@@ -154,8 +154,8 @@ with tab3:
                 raise ValueError('An account with this API key does not exist')
             result = json.loads(result['message'].replace("'", '"'))
             result = pd.DataFrame.from_dict(result, orient='index', columns=['Count'])
-            st.bar_chart(result)
             st.metric('Number of times used', int(result['Count'].sum()))
+            st.bar_chart(result)
         except ValueError as e:
             st.error(str(e))
 
