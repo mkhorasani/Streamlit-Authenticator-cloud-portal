@@ -153,8 +153,10 @@ with tab3:
             if 'None' in result['message']:
                 raise ValueError('An account with this API key does not exist')
             result = json.loads(result['message'].replace("'", '"'))
-            result = pd.DataFrame.from_dict(result, orient='index', columns=['Count'])
-            st.metric('Total number of times used', int(result['Count'].sum()))
+            result = pd.DataFrame.from_dict(result, orient='index', columns=['Calls'])
+            result['Calls'] = result['Calls'].astype(int)
+            st.write('___')
+            st.metric('Total number of calls', int(result['Calls'].sum()))
             st.write('___')
             st.bar_chart(result)
         except ValueError as e:
