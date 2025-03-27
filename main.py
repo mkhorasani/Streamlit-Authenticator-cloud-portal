@@ -147,6 +147,7 @@ with tab3:
         try:
             if not validate_length(api_key, min_length=32, max_length=32):
                 raise ValueError('API key is not correct')
+            st.write(count_calls(api_key)['message'])
             result = pd.DataFrame(count_calls(api_key)['message'])
             st.write(result)
             st.bar_chart(result)
