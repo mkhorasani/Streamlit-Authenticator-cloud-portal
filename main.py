@@ -149,6 +149,7 @@ with tab3:
         try:
             if not validate_length(api_key, min_length=32, max_length=32):
                 raise ValueError('API key is not correct')
+            st.write(json.loads(count_calls(api_key)['message'].replace("'", '"')))
             result = pd.DataFrame(json.loads(count_calls(api_key)['message'].replace("'", '"')))
             st.write(result)
             st.bar_chart(result)
