@@ -156,7 +156,6 @@ with tab3:
             result = pd.DataFrame.from_dict(result, orient='index', columns=['Calls'])
             st.write('___')
             st.metric('Total number of calls', int(result['Calls'].sum()))
-            st.write('___')
             st.bar_chart(result)
         except ValueError as e:
             st.error(str(e))
