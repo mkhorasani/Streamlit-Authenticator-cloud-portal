@@ -152,6 +152,7 @@ with tab3:
             result = json.loads(count_calls(api_key)['message'].replace("'", '"'))
             st.write(result)
             result = pd.DataFrame.from_dict(result, orient='index', columns=['Count'])
+            st.write(result)
             st.bar_chart(result)
             if 'None' in result['message']:
                 raise ValueError('An account with this API key does not exist')
