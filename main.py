@@ -149,11 +149,12 @@ with tab3:
         try:
             if not validate_length(api_key, min_length=32, max_length=32):
                 raise ValueError('API key is not correct')
-            result = pd.DataFrame([json.loads(count_calls(api_key)['message'].replace("'", '"'))])
+            result = json.loads(count_calls(api_key)['message'].replace("'", '"'))
+            result = pd.DataFrame.from_dict(result, orient='index', columns=['Count'])
             st.bar_chart(result)
             if 'None' in result['message']:
                 raise ValueError('An account with this API key does not exist')
-            st.metric('Number of times used', str(result['message']))
+            st.metric('Number of times used', int(result['Count'].sum()))
         except ValueError as e:
             st.error(str(e))
 
