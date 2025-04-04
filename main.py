@@ -84,7 +84,7 @@ def unsubscribe_account_verification_code(email_unsubscribe: str) -> None:
             
 # Display logo
 st.image('logo.png')
-tab1, tab2, tab3 = st.tabs(['Register', 'Unsubscribe', 'Stats'])
+tab1, tab2, tab3 = st.tabs(['Register', 'Unsubscribe', 'Stats', 'Contact'])
 
 # Registration tab
 with tab1:
@@ -160,6 +160,16 @@ with tab3:
                 st.bar_chart(result)
         except ValueError as e:
             st.error(str(e))
+
+# Contact tab
+with tab4:
+    st.markdown("""Use the form below to contact us for any queries.""")
+    sender_email = st.text_input('Your email')
+    contact_message = st.text_area('Your message')
+    if st.button('Send')
+        send_email_general('Streamlit Authenticator Contact',
+                       contact_message, sender_email, 'CONTACT')
+        st.success('Message sent successfully')
 
 # Footer
 st.write('___')
