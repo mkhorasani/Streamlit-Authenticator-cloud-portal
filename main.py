@@ -166,7 +166,7 @@ with tab4:
     st.markdown("""Use the form below to contact us for any queries.""")
     sender_email = st.text_input('Your email')
     contact_message = st.text_area('Your message')
-    if st.button('Send')
+    if st.button('Send'):
         send_email_general('Streamlit Authenticator Contact',
                        contact_message, sender_email, 'CONTACT')
         st.success('Message sent successfully')
