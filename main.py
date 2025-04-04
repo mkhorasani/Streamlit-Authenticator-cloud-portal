@@ -84,7 +84,7 @@ def unsubscribe_account_verification_code(email_unsubscribe: str) -> None:
             
 # Display logo
 st.image('logo.png')
-tab1, tab2, tab3 = st.tabs(['Register', 'Unsubscribe', 'Stats', 'Contact'])
+tab1, tab2, tab3, tab4 = st.tabs(['Register', 'Unsubscribe', 'Stats', 'Contact'])
 
 # Registration tab
 with tab1:
