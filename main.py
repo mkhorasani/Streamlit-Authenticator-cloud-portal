@@ -167,9 +167,16 @@ with tab4:
     sender_email = st.text_input('Email')
     contact_message = st.text_area('Message')
     if st.button('Send'):
-        send_email_general('Streamlit Authenticator Contact',
-                       contact_message, sender_email, 'CONTACT')
-        st.success('Message sent successfully')
+        try:
+            if not validate_email(sender_email):
+                raise ValueError('Email is not valid')
+            if not validate_length(contact_message):
+                raise ValueError('Message cannot be empty')
+            send_email_general('Streamlit Authenticator Contact',
+                           contact_message, sender_email, 'CONTACT')
+            st.success('Message sent successfully')
+        except ValueError as e:
+            st.error(str(e))
 
 # Footer
 st.write('___')
