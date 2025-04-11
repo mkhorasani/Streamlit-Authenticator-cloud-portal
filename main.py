@@ -76,6 +76,7 @@ def unsubscribe_account_verification_code(email_unsubscribe: str) -> None:
                 raise VerificationError('Code is incorrect')
             result = unsubscribe_account(email_unsubscribe)
             st.session_state.pop('unsubscribe_code', None)
+            st.write(result)
             if 'deleted successfully' not in result['message']:
                 raise SubscriptionError('Unable to unsubscribe')
             st.success('Account unsubscribed successfully')
