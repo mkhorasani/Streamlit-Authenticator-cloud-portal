@@ -184,13 +184,13 @@ if st.query_params.get('email'):
     st.subheader('Feedback')
     st.write('___')
     st.markdown("""Use the form below to provide us with feedback for your subscription to Streamlit Authenticator""")
+    q0 = st.text_input('Email', value=st.query_params['email'], disabled=True)
     q1 = st.checkbox("""Would you be willing to pay to use Streamlit Authenticator's two factor authentication and
                     send email features?""")
     q2, q3 = None, None
     if q1:
         col1, col2 = st.columns(2)
         with col1:
-            q0 = st.text_input('Email', value=st.query_params['email'], disabled=True)
             q2 = st.radio('If yes which one of the following payment models would your prefer?', 
                         ['Monthly subscription', 'Annual', 'Lifetime'])
         with col2:
