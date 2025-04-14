@@ -199,7 +199,7 @@ if st.query_params.get('email'):
     q4 = st.text_area('Any additional feedback?')
     if st.button('Send'):
         try:
-            send_email_general('Streamlit Authenticator User Feedback',
+            send_email_general('Streamlit Authenticator Feedback',
                         str(f'email: {q0}, pay: {q1}, method: {q2}, amount: {q3}, message: {q4}'),
                         'noreply@stauthenticator.com', 'CONTACT')
             st.success('Message sent successfully')
