@@ -86,7 +86,7 @@ def unsubscribe_account_verification_code(email_unsubscribe: str) -> None:
 st.image('logo.png')
 tab1, tab2, tab3, tab4, tab5 = st.tabs(['Register', 'Unsubscribe', 'Stats', 'Contact', 'Feedback'])
 
-if not st.query_params['email']:
+if not st.query_params.get('email'):
     # Registration tab
     with tab1:
         st.markdown("""Register to receive a free API key to use Streamlit Authenticator's
