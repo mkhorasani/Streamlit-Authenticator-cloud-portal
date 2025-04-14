@@ -191,7 +191,7 @@ if st.query_params.get('email'):
     if q1:
         col1, col2 = st.columns(2)
         with col1:
-            q2 = st.radio('If yes which one of the following payment models would your prefer?', 
+            q2 = st.radio('Which one of the following payment models would your prefer?', 
                         ['Monthly subscription', 'Annual', 'Lifetime'])
         with col2:
 
