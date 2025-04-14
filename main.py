@@ -84,9 +84,9 @@ def unsubscribe_account_verification_code(email_unsubscribe: str) -> None:
             
 # Display logo
 st.image('logo.png')
-tab1, tab2, tab3, tab4, tab5 = st.tabs(['Register', 'Unsubscribe', 'Stats', 'Contact', 'Feedback'])
 
 if not st.query_params.get('email'):
+    tab1, tab2, tab3, tab4 = st.tabs(['Register', 'Unsubscribe', 'Stats', 'Contact'])
     # Registration tab
     with tab1:
         st.markdown("""Register to receive a free API key to use Streamlit Authenticator's
@@ -181,6 +181,7 @@ if not st.query_params.get('email'):
 
 # Feedback tab
 if st.query_params.get('email'):
+    tab5 = st.tabs(['Feedback'])
     with tab5:
         st.markdown("""Use the form below to provide us with feedback for your subscription to Streamlit Authenticator""")
         q0 = st.text_input('Email', value=st.query_params['email'], disabled=True)
@@ -188,7 +189,7 @@ if st.query_params.get('email'):
                          send email features?""")
         q2 = st.radio('If yes which one of the following payment models would your prefer?', 
                       ['Monthly subscription', 'Annual', 'Lifetime'])
-        q3 = st.number_input(f'How much would you be willing to pay for the **{q2}** payment method in USD?', [0, 100])
+        q3 = st.number_input(f'How much would you be willing to pay for the **{q2}** payment method in USD?', min_value=0, max_value=100)
         q4 = st.text_area('Any additional feedback?')
         if st.button('Send'):
             try:
