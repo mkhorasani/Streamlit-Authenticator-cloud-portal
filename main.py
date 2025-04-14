@@ -181,24 +181,23 @@ if not st.query_params.get('email'):
 
 # Feedback tab
 if st.query_params.get('email'):
-    tab5 = st.tabs(['Feedback'])
-    with tab5:
-        st.markdown("""Use the form below to provide us with feedback for your subscription to Streamlit Authenticator""")
-        q0 = st.text_input('Email', value=st.query_params['email'], disabled=True)
-        q1 = st.checkbox("""Would you be willing to pay to use Streamlit Authenticator's two factor authentication and
-                         send email features?""")
-        q2 = st.radio('If yes which one of the following payment models would your prefer?', 
-                      ['Monthly subscription', 'Annual', 'Lifetime'])
-        q3 = st.number_input(f'How much would you be willing to pay for the **{q2}** payment method in USD?', min_value=0, max_value=100)
-        q4 = st.text_area('Any additional feedback?')
-        if st.button('Send'):
-            try:
-                send_email_general('Streamlit Authenticator Feedback',
-                            str(f'email: {q0}, pay: {q1}, method: {q2}, amount: {q3}, message: {q4}'),
-                            'noreply@stauthenticator.com', 'CONTACT')
-                st.success('Message sent successfully')
-            except ValueError as e:
-                st.error(str(e))
+    st.subheader('Feedback')
+    st.markdown("""Use the form below to provide us with feedback for your subscription to Streamlit Authenticator""")
+    q0 = st.text_input('Email', value=st.query_params['email'], disabled=True)
+    q1 = st.checkbox("""Would you be willing to pay to use Streamlit Authenticator's two factor authentication and
+                        send email features?""")
+    q2 = st.radio('If yes which one of the following payment models would your prefer?', 
+                    ['Monthly subscription', 'Annual', 'Lifetime'])
+    q3 = st.number_input(f'How much would you be willing to pay for the **{q2}** payment method in USD?', min_value=0, max_value=100)
+    q4 = st.text_area('Any additional feedback?')
+    if st.button('Send'):
+        try:
+            send_email_general('Streamlit Authenticator Feedback',
+                        str(f'email: {q0}, pay: {q1}, method: {q2}, amount: {q3}, message: {q4}'),
+                        'noreply@stauthenticator.com', 'CONTACT')
+            st.success('Message sent successfully')
+        except ValueError as e:
+            st.error(str(e))
 
 # Footer
 st.write('___')
