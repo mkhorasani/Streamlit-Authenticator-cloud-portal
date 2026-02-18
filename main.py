@@ -86,36 +86,36 @@ def unsubscribe_account_verification_code(email_unsubscribe: str) -> None:
 st.image('logo.png')
 
 if not st.query_params.get('email'):
-    tab1, tab2, tab3, tab4 = st.tabs(['Register', 'Unsubscribe', 'Stats', 'Contact'])
+    tab2, tab3, tab4 = st.tabs(['Unsubscribe', 'Stats', 'Contact'])
     # Registration tab
-    with tab1:
-        st.markdown("""Register to receive a free API key to use Streamlit Authenticator's
-            **two factor authentication** and **send email** features""")
-        app_name: str = st.text_input('Your application name', autocomplete='off')
-        email_register: str = st.text_input('Email', key='email_register', autocomplete='off')
+    # with tab1:
+    #     st.markdown("""Register to receive a free API key to use Streamlit Authenticator's
+    #         **two factor authentication** and **send email** features""")
+    #     app_name: str = st.text_input('Your application name', autocomplete='off')
+    #     email_register: str = st.text_input('Email', key='email_register', autocomplete='off')
         
-        if 'register_code' not in st.session_state:
-            st.session_state['register_code'] = None
+    #     if 'register_code' not in st.session_state:
+    #         st.session_state['register_code'] = None
 
-        if st.button('Register'):
-            try:
-                if not validate_email(email_register):
-                    raise ValueError('Email is not valid')
-                if not validate_length(app_name):
-                    raise ValueError('Application name is not valid')
-                result = email_previously_registered(email_register)
-                if 'not previously registered' in result['message']:
-                    register_code: str = generate_random_verification_code()
-                    st.session_state['register_code'] = hash(register_code)
-                    send_email_general('Streamlit Authenticator Verification Code',
-                                    register_code, email_register, '2FA')
-                else:
-                    raise ValueError('Email is already registered')
-            except ValueError as e:
-                st.error(str(e))
+    #     if st.button('Register'):
+    #         try:
+    #             if not validate_email(email_register):
+    #                 raise ValueError('Email is not valid')
+    #             if not validate_length(app_name):
+    #                 raise ValueError('Application name is not valid')
+    #             result = email_previously_registered(email_register)
+    #             if 'not previously registered' in result['message']:
+    #                 register_code: str = generate_random_verification_code()
+    #                 st.session_state['register_code'] = hash(register_code)
+    #                 send_email_general('Streamlit Authenticator Verification Code',
+    #                                 register_code, email_register, '2FA')
+    #             else:
+    #                 raise ValueError('Email is already registered')
+    #         except ValueError as e:
+    #             st.error(str(e))
         
-        if st.session_state['register_code'] is not None:
-            register_verification_code(app_name, email_register)
+    #     if st.session_state['register_code'] is not None:
+    #         register_verification_code(app_name, email_register)
 
     # Unsubscribe tab
     with tab2:
